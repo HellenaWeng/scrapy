@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="graduationproject@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+    <root id="1"/>
+    <schema id="2" parent="1" name="graduationproject">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="asso"/>
+    <schema id="4" parent="1" name="books"/>
+    <schema id="5" parent="1" name="briup2_blog"/>
+    <schema id="6" parent="1" name="briup3_blog"/>
+    <schema id="7" parent="1" name="briup4_blog"/>
+    <schema id="8" parent="1" name="briup5_blog"/>
+    <schema id="9" parent="1" name="grasssys"/>
+    <schema id="10" parent="1" name="imau"/>
+    <schema id="11" parent="1" name="information_schema"/>
+    <schema id="12" parent="1" name="myblog"/>
+    <schema id="13" parent="1" name="mysql"/>
+    <schema id="14" parent="1" name="newtry_blog"/>
+    <schema id="15" parent="1" name="performance_schema"/>
+    <schema id="16" parent="1" name="por"/>
+    <schema id="17" parent="1" name="sakila"/>
+    <schema id="18" parent="1" name="sentiment"/>
+    <schema id="19" parent="1" name="shop"/>
+    <schema id="20" parent="1" name="sys"/>
+    <schema id="21" parent="1" name="test1"/>
+    <schema id="22" parent="1" name="warehouse"/>
+    <schema id="23" parent="1" name="world"/>
+    <table id="24" parent="2" name="jobbole_article"/>
+    <column id="25" parent="24" name="title">
+      <Position>1</Position>
+      <DataType>varchar(200)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="26" parent="24" name="create_date">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="27" parent="24" name="url">
+      <Position>3</Position>
+      <DataType>varchar(300)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="28" parent="24" name="url_object_id">
+      <Position>4</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="29" parent="24" name="front_image_url">
+      <Position>5</Position>
+      <DataType>varchar(300)|0</DataType>
+    </column>
+    <column id="30" parent="24" name="front_image_path">
+      <Position>6</Position>
+      <DataType>varchar(200)|0</DataType>
+    </column>
+    <column id="31" parent="24" name="praise_num">
+      <Position>7</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="32" parent="24" name="comment_num">
+      <Position>8</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="33" parent="24" name="fav_num">
+      <Position>9</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="34" parent="24" name="tags">
+      <Position>10</Position>
+      <DataType>varchar(200)|0</DataType>
+    </column>
+    <column id="35" parent="24" name="content">
+      <Position>11</Position>
+      <DataType>longtext|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="36" parent="24" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>url_object_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>
