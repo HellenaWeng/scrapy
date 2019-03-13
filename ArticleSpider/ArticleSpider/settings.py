@@ -68,7 +68,7 @@ ITEM_PIPELINES = {
    # 'ArticleSpider.pipelines.JsonExporterPipeline': 2,
    # # 'scrapy.pipelines.images.ImagesPipeline': 1,
    # 'ArticleSpider.pipelines.ArticleImagePipeline' : 1,
-   'ArticleSpider.pipelines.MysqlPipeline' : 1,
+   'ArticleSpider.pipelines.MysqlTwistedPipeline' : 1,
 }
 # 一个固定配置
 IMAGES_URLS_FIELD = "front_image_url" #配置完成后，ImagePipline就会去item中找front_image_url字段下载图片
@@ -102,6 +102,6 @@ IMAGES_STORE= os.path.join(project_dir,'images')
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 MYSQL_HOST = 'localhost'
-MYSQL_DBNAME = 'jobbole_article'
+MYSQL_DBNAME = 'graduationproject'
 MYSQL_USER = 'root'
 MYSQL_PASSWORD = '5201230618102x'

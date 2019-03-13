@@ -7,9 +7,12 @@
 
 from scrapy.pipelines.images import ImagesPipeline
 from scrapy.exporters import JsonItemExporter
+from twisted.enterprise import adbapi
+
 import codecs
 import json
 import MySQLdb
+import MySQLdb.cursors
 
 class ArticleSpiderPipeline(object):
     def process_item(self, item, spider):
@@ -78,11 +81,38 @@ class MysqlPipeline(object):
         self.conn.commit()
 
 class MysqlTwistedPipeline(object):
+    def __init__(self,dbpool):
+        self.dbpool = dbpool
     @classmethod
     def from_settings(cls,settings):
-        host = settings["MYSQL_HOST"]
-        dbname = settings["MYSQL_DBNAME"]
-        user = settings['MYSQL_USER']
-        password = settings['MYSQL_PASSWORD']
-        pass
-
+        dbparams = dict(
+            host=settings["MYSQL_HOST"],
+            db=settings["MYSQL_DBNAME"],
+            user=settings['MYSQL_USER'],
+            passwd=settings['MYSQL_PASSWORD'],
+            charset = 'utf8',
+            cursorclass = MySQLdb.cursors.DictCursor,
+            use_unicode = True
+        )
+        dbpool = adbapi.ConnectionPool("MySQLdb",**dbparams) #dbapiName 指的就是MySQLdb的模块名，我们直接用MySQLdb,告诉该模块我们用到的是MySQLdb的模块
+        return cls(dbpool)
+    def process_item(self,item,spider):
+        #使用twisted方法runInteraction()方法将mysql插入变成异步执行
+        # 在此处需要用到dbpool的一个函数,这个函数第一个参数就是我们自己要定义的一个函数，这个函数中写入我们具体插入的逻辑，item就是我们要插入的数据
+        query = self.dbpool.runInteraction(self.do_insert,item)
+        query.addErrback(self.handle_error)
+        #process-item执行完可能会有错误，但是因为是异步操作，我们是不能等它执行完直接解决错误的，此处的错误处理是专门的处理函数
+        # 此处可添加一个我们自己的异步错误处理函数
+    def handle_error(self,failure):
+        #自定义函数，处理异步插入的异常
+        print(failure)
+    def do_insert(self, cursor, item):
+        #执行具体插入
+        insert_sql="insert into jobbole_article (title,url,url_object_id,fav_num,praise_num,comment_num,content) values( %s, %s, %s, %s, %s, %s, %s)"
+        content=",".join(item["content"])
+        params=(
+        item["title"], item["url"], item["url_object_id"], item["fav_num"], item["praise_num"], item["comment_num"],
+        content)
+        cursor.execute('SET NAMES utf8mb4')
+        cursor.execute(insert_sql, params)
+        #不需要做commit，cursor会自动帮我们来做
