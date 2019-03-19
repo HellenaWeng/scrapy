@@ -4,9 +4,9 @@ import re
 import datetime
 from scrapy.http import Request
 from urllib import parse
-from ArticleSpider.items import JobboleArticleItem
+from ArticleSpider.items import JobboleArticleItem,ArticleItemLoader
 from ArticleSpider.utils.common import get_md5
-
+from scrapy.loader import ItemLoader
 # extract()方法调用后返回的数据变为一个数组了
 class JobboleSpider(scrapy.Spider):
     name = 'jobbole'
@@ -75,5 +75,21 @@ class JobboleSpider(scrapy.Spider):
         article_item["tags"]=tags
         article_item["content"]=content
 
+        #通过ItemLoader加载item
+        item_loader = ArticleItemLoader(item = JobboleArticleItem(),response = response)#ItemLoader实例化
+        item_loader.add_xpath("title","//*[@class='entry-header']/h1/text()")
+        item_loader.add_xpath("create_date","//p[@class='entry-meta-hide-on-mobile']/text()")
+        item_loader.add_value("url",response.url)
+        item_loader.add_value("url_object_id",get_md5(response.url))
+        item_loader.add_value("front_image_url",[front_image_url])
+        item_loader.add_xpath("praise_num","//span[contains(@class,'vote-post-up')]/h10/text()")
+        item_loader.add_xpath("fav_num","//span[contains(@class,'bookmark-btn')]/text()")
+        item_loader.add_xpath("comment_num", "//a[@href='#article-comment']/span/text()")
+        item_loader.add_xpath("tags", "//p[@class='entry-meta-hide-on-mobile']/a/text()")
+        item_loader.add_xpath("content","string(//div[@class='entry'])")
+
+        article_item = item_loader.load_item()
         yield article_item
+
+
 

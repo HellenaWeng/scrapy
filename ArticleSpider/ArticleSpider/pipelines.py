@@ -60,13 +60,15 @@ class ArticleImagePipeline(ImagesPipeline):
     # results是一个tuple
     # 使用循环 取出path
     def item_completed(self, results, item, info):
-        for ok,value in results:
-            image_file_path = value["path"]
-        item["front_image_path"] = image_file_path
+        if "front_image_url" in item:
+            for ok,value in results:
+                image_file_path = value["path"]
+            item["front_image_path"] = image_file_path
         return item
 
 
 class MysqlPipeline(object):
+    #采用同步机制写入sql
     def __init__(self):
         self.conn = MySQLdb.connect('localhost','root','5201230618102x','graduationproject',charset = 'utf8',use_unicode = True) #参数：主机，用户名，密码，数据库名称
         #数据库操作具体是用cursor完成的
